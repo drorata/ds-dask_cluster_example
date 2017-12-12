@@ -1,5 +1,7 @@
 # Moving from local machine to Dask cluster
 
+Author: Dror Atariah
+
 ## Introduction
 
 As part of the never-ending effort to improve reBuy and turn it into a market leader, we recently decided to tackle the challenges of our customer services agents.
@@ -341,3 +343,8 @@ docker run -it --rm -p 8786:8786 dask-example ./gridsearch_cluster_dask.py x.y.z
 ```
 
 Note that you need to forward the port `8786`.
+
+## Yet to be implemented
+
+* Utilize [spots](https://aws.amazon.com/ec2/spot/)
+* Enable a node with Jupyter server so the local notebook won't be needed
