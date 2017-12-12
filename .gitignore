@@ -1,0 +1,5 @@
+scheulder_setup.sh
+worker_setup.sh
+terraform.tfstate*
+.terraform/
+instance.tf
