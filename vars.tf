@@ -4,7 +4,7 @@ variable "instanceType" {
 }
 
 variable "spotPrice" {
-  # Note needed for on-demand instances
+  # Not needed for on-demand instances
   default = "0.1"
 }
 

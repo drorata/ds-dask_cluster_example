@@ -14,7 +14,7 @@ In this tutorial/post we shall discuss how to take a local code doing grid searc
 ## Start locally
 
 We start with a minimal example of data loading and grid search the hyperparameters.
-The project's structure is:
+The project's structure might be:
 
 ```
 .
@@ -47,7 +47,7 @@ search.fit(digits.data, digits.target)
 ```
 
 A little more elaborated version of this example can be found in the docker image defined [here](./Dockerfile).
-You can try it out by:
+You can try it out by cloning this repository and running the following:
 
 ```bash
 docker build . -t dask-example
@@ -57,14 +57,14 @@ docker run --rm dask-example ./gridsearch_local.py
 So far, so good.
 But, imagine the data set is larger and the hyperparameters' space is more complicated.
 Things will turn virtually impossible to run on a local machine.
-At this point there are two possible courses of action:
+At this point there are at least two possible courses of action:
 
 1. Use more computing power
 2. Optimize the search and/or be smarter
 
-In this post we take the first course.
+In this post we take the former.
 A seemingly easy way to scale out the local machine to a cluster is [`dask`](http://dask.pydata.org/en/latest/).
-To start with, staying on the local machine, let's try out the `LocalCluster`.
+To start with, staying on the local machine, let's try out the [`LocalCluster`](https://distributed.readthedocs.io/en/latest/local-cluster.html).
 Checkout [`gridsearch_local_dask.py`](./gridsearch_local_dask.py) which you can try out by
 
 ```bash
@@ -75,7 +75,7 @@ This already feels a little faster, isn't it?
 But, we *need* to scale out and to that end we want to have a cluster of EC2 nodes that can be used.
 There are two main steps:
 
-1. Bundle the computation environment in a Docker images
+1. Bundle the computation environment in a Docker image
 2. Run a `dask` cluster where each node has the computation environment
 
 
@@ -106,8 +106,8 @@ It is important to include in the `Dockerfile` all the components needed for the
 
 Next, the image should be placed in a location accessible to EC2 instances.
 It is time to push the image to a Docker registry.
-In this tutorial, we use the AWS service - ECS.
-I assume you have `awscli` installed and the credentials are known.
+In this tutorial, we use the AWS service - ECS but you can use other options like `DockerHub`.
+I assume you have [`awscli`](https://aws.amazon.com/cli/) installed and the credentials are known.
 You can log in to the registry simply by
 
 ```bash
@@ -125,9 +125,9 @@ It is time to setup the nodes of the cluster.
 We take a declarative approach and use [`terraform`](www.terraform.io) to setup the nodes of the cluster.
 Note that in this example we utilize the AWS Spots; you can easily change the code and use the regular on-demand instances.
 This is left as an exercise.
-The cluster can be defined using two types of files:
+We use two groups of file to define the cluster:
 
-- `.tf` instructions: defining what instances to use, what tags, regions, etc.
+- `.tf` instructions: parsed by `terraform` and defining what instances to use, what tags, regions, etc.
 - Provisioning shell scripts: installing needed tools on the nodes
 
 
@@ -160,7 +160,7 @@ variable "instanceType" {
 }
 
 variable "spotPrice" {
-  # Note needed for on-demand instances
+  # Not needed for on-demand instances
   default = "0.1"
 }
 
@@ -196,7 +196,8 @@ variable "dockerRegistry" {
   default = ""
 }
 
-# By defining the AWS keys as variables we can get them from the command line and pass them to the provisioning scripts
+# By defining the AWS keys as variables we can get them from the command line
+# and pass them to the provisioning scripts
 variable "awsKey" {}
 variable "awsPrivateKey" {}
 ```
@@ -269,8 +270,8 @@ resource "aws_spot_instance_request" "dask-worker" {
 
 Here are some important elements to note:
 
-1. The [AMI](http://docs.aws.amazon.com/AmazonECS/latest/developerguide/ecs-optimized_AMI.html) I use is the one for `eu-west-1` which is optimized for Docker and provided by Amazon. It is possible to use other images as bases, but it is important that they will support `docker`.
-2. Define the private IP of the scheduler. You will need to use it when starting the workers and it is easier to know the IP than to find it
+1. The [AMI](http://docs.aws.amazon.com/AmazonECS/latest/developerguide/ecs-optimized_AMI.html) I use is the one for `eu-west-1` which is optimized for Docker and provided by Amazon. It is possible to use other images, but it is important that they will support `docker`.
+2. Define the private IP of the scheduler. You will need to use it when starting the workers and it is easier to *know* the IP than to *find* it
 3. Indicate how many workers should be used
 
 #### `output.tf`
@@ -337,7 +338,7 @@ docker run -d -it --network host ${DOCKER_REG} /opt/conda/bin/dask-worker ${SCHE
 
 Note that we start `dask-worker` instead of `dask-scheduler` and we indeicate the private IP of the scheduler.
 **Important** to note the `--network host`.
-Intuitively, this makes sure that the container's network and the node's will be the same and therefore the nodes in the containers on different nodes will be able to communicate.
+Intuitively, this makes sure that the containers' networks and their corresponding hosts will be the same and therefore the different containers on different hosts will be able to communicate.
 
 
 
@@ -358,6 +359,8 @@ terraform apply -var 'workersNum=2' -var 'instanceType="t2.small"' \
 -var 'dockerRegistry="repo.url/image-name:latest"'
 ```
 
+Note that we use two environment variables for the AWS keys.
+Other variables defined in `var.tf` are passed as parameters.
 Once finished, you can access the newly created scheduler node by: `ssh -i ~/.aws/key.pem ec2-user@$(terraform output scheduler-info)`.
 In the cluster you can check the log at `/var/log/user-data.log`.
 You can also check the status of the running Docker containers using `docker ps`.
@@ -421,7 +424,7 @@ If you have a running cluster at `x.y.z.w`, you can try it out:
 docker run -it --rm -p 8786:8786 dask-example ./gridsearch_cluster_dask.py x.y.z.w
 ```
 
-## Yet to be implemented
+## Yet to be discussed
 
 * You might want to explore `terraform workspace`; this can help you run several clusters from the same directory. For example when running different experiements at the same time.
 * Enable a node with Jupyter server so the local notebook won't be needed
