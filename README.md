@@ -301,9 +301,10 @@ We provide two templates of scripts which will be filled with the needed variabl
 ```bash
 #!/bin/bash
 
-# scheulder_setup.sh
+# scheduler_setup.sh
 
 exec > >(tee /var/log/user-data.log|logger -t user-data -s 2>/dev/console) 2>&1
+set -x
 
 echo "Installing pip"
 curl -O https://bootstrap.pypa.io/get-pip.py
