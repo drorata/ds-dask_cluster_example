@@ -4,7 +4,7 @@ Author: Dror Atariah
 
 ## Introduction
 
-As part of the never-ending effort to improve reBuy and turn it into a market leader, we recently decided to tackle the challenges of our customer services agents.
+As part of the never-ending effort to improve [reBuy](https://www.rebuy.de/) and turn it into a market leader, we recently decided to tackle the challenges of our customer services agents.
 As a first step, a dump of tagged emails was created and the first goal was set: build a POC that tags the emails automatically.
 To that end, NLP had to be used and a lengthy (and greedy) [grid search](http://scikit-learn.org/stable/modules/generated/sklearn.model_selection.GridSearchCV.html) had to be executed.
 So lengthy, that 4 cores of a notebook were working for couple of hours with no results.
