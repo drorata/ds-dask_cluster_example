@@ -14,7 +14,7 @@ At the end of this tutorial,  you should have a minimal working example that ena
 
 ## Motivation 
 
-As you read above: we wanted to create a system to analyze and reply to some of them (if applicable). As a first step, a dump of tagged emails was created and the first goal was set: build a Proof Of Concept (POC) that tags the emails automatically. 
+As you read above: we wanted to create a system to analyze and reply to some of emails received by our customer service team (if applicable). As a first step, a dump of tagged emails was created and the first goal was set: build a Proof Of Concept (POC) that tags the emails automatically. 
 
 Having such a system has a twofold effect: 
 1. Improve customer experience due to faster resolution of their concerns; 
@@ -130,7 +130,7 @@ The local `requirements.txt` and `setup.py` are loaded to the image.
 - If `./src` includes needed classes, functions etc., then make sure you include something like `-e .` or merely `.` in `requirements.txt`; this way these dependencies will be available in the image.
 - It is important to include in the `Dockerfile` all the components needed for the computation environment!
 
-Next, the image should be placed in a location accessible to EC2 instances.It is time to push the image to a Docker registry.
+Next, the image should be placed in a location accessible to EC2 instances. It is time to push the image to a Docker registry.
 
 In this tutorial, you use the AWS service - ECS but you can use other options like `DockerHub`. Here, I assume you have [`awscli`](https://aws.amazon.com/cli/) installed, configured and the credentials are known.
 
@@ -151,7 +151,7 @@ It is time to setup the nodes of the cluster.
 Take a declarative approach and use [`terraform`](https://www.terraform.io) to setup the nodes of the cluster.
 Note that in this example I utilize the AWS Spots; you can easily change the code and use the regular on-demand instances.
 
-This is left as an exercise. <!-- maybe give a hint here towards the solution or let people know that the solution is in the GitHub repo --->
+**Note** that in this example, I utilize the AWS Spots. However, you can change the code and use the regular on-demand instances, but it is out of the scope of this tutorial.
 
 I use two groups of file to define the cluster:
 
@@ -160,7 +160,7 @@ I use two groups of file to define the cluster:
 
 ### `.tf` files
 
-When using `terraform` all `.tf` files are read and concatenated.There are more details of course; a good entry point would be [here](https://www.terraform.io/docs/configuration/index.html).
+When using `terraform` all `.tf` files are read and concatenated. There are more details, of course. A good entry point would be [here](https://www.terraform.io/docs/configuration/index.html).
 
 In this example, I organized the `.tf` files as follows:
 
@@ -390,7 +390,7 @@ terraform apply -var 'workersNum=2' -var 'instanceType="t2.small"' \
 -var 'dockerRegistry="repo.url/image-name:latest"'
 ```
 
-**Note** that use of two environment variables for the AWS keys. Other variables defined in `var.tf` are passed as parameters.
+**Note** the use of two environment variables for the AWS keys. Other variables defined in `var.tf` are passed as parameters.
 
 <!-- could you restructure this paragraph a bit? --->
 Once finished, you can access the newly created scheduler node by: `ssh -i ~/.aws/key.pem ec2-user@$(terraform output scheduler-info)`. For this to work, you might need to download a `pem` file from AWS console. In the cluster you can check the log at `/var/log/user-data.log`. You can also check the status of the running Docker containers using `docker ps`. Lastly, if everything went well, you should be able to access the web interface of the cluster.
