@@ -160,7 +160,7 @@ I use two groups of file to define the cluster:
 
 ### `.tf` files
 
-When using `terraform` all `.tf` files are read and concatenated. There are more details, of course. A good entry point would be [here](https://www.terraform.io/docs/configuration/index.html).
+When using `terraform`, all `.tf` files are read and concatenated. There are more details, of course. A good entry point would be [this one](https://www.terraform.io/docs/configuration/index.html).
 
 In this example, I organized the `.tf` files as follows:
 
