@@ -453,9 +453,7 @@ docker run -it --rm -p 8786:8786 dask-example ./gridsearch_cluster_dask.py x.y.z
 I hope that this tutorial gave you an idea how to start a cluster on AWS for distributed computing using `dask`.
 This is obvisouly a mere starting point. In many real problems, you would have to also play smart and you won't get away by simply spinning more and more nodes.
 
-A side story in this tutorial is the beauty of a declarative approach.
-
-If you make sure that your environment is well defined using `environment.yml` or `requirements.txt` together with proper `Dockerfile` you are on a winning track. Reproducing your work is going to be much easier and scaling should become more straightforward as well.
+A side story in this tutorial is the beauty of a declarative approach. If you make sure that your environment is well defined using `environment.yml` or `requirements.txt` together with proper `Dockerfile` you are on a winning track. Reproducing your work is going to be much easier and scaling should become more straightforward as well.
 
 *One word of warning*; following the tutorial above is very likely to have costs associated!
 
