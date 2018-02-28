@@ -14,7 +14,7 @@ At the end of this tutorial,  you should have a minimal working example that ena
 
 ## Motivation 
 
-As you read above: we wanted to create a system to analyze and reply to some of emails received by our customer service team (if applicable). As a first step, a dump of tagged emails was created and the first goal was set: build a Proof Of Concept (POC) that tags the emails automatically. 
+As you read above: we wanted to create a system to analyze and reply to some emails received by our customer service team (if applicable). As a first step, a dump of tagged emails was created and the first goal was set: build a Proof Of Concept (POC) that tags the emails automatically. 
 
 Having such a system has a twofold effect: 
 1. Improve customer experience due to faster resolution of their concerns; 
