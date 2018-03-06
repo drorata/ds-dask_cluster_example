@@ -2,7 +2,7 @@
 
 Author: Dror Atariah
 
-As part of the never-ending effort to improve [reBuy](https://www.rebuy.de/) and turn it into a market leader, we recently decided to tackle (some of) the challenges of our customer services agents using data: our plan was to craft a system that analyze the content of emails from our customers and, when applicable, reply automatically to some of them.
+As part of the never-ending effort to improve [reBuy](https://www.rebuy.de/) and turn it into a market leader, we recently decided to tackle (some of) the challenges of our customer services agents using data: our plan was to craft a system that analyzes the content of emails from our customers and, when applicable, reply automatically to some of them.
 
 In this tutorial, you will get to know more on how we accomplished this. You will learn how to port a locally running grid search which uses `scikit-learn` to a cluster of AWS (EC2) nodes.
 - You will start with a simple toy example, which can also be found inside a provided docker image.
@@ -392,14 +392,13 @@ terraform apply -var 'workersNum=2' -var 'instanceType="t2.small"' \
 
 **Note** the use of two environment variables for the AWS keys. Other variables defined in `var.tf` are passed as parameters.
 
-<!-- could you restructure this paragraph a bit? --->
-Once finished, you can access the newly created scheduler node by:
+Once finished, you can access the newly created scheduler node by executing the following line of bash code:
 
 ```bash
 ssh -i ~/.aws/key.pem ec2-user@$(terraform output scheduler-info)
 ````
 
-For this to work, you will need to download a `pem` file from AWS console. Once logged in to the scheduler, you can check the log, as defined in the provisioning script, at `/var/log/user-data.log`. You can also check the status of the running docker containers using `docker ps`. Lastly, if everything went well, you should be able to access the web interface of the `dask` cluster and verify that all workers are detected and "linked" to the scheduler.
+For this to work, you will need to download a `pem` file from AWS console. Once logged in to the scheduler, you can check the log, as defined in the provisioning script, at `/var/log/user-data.log`. You can also check the status of the running docker containers using `docker ps`. Lastly, if everything went well, you should be able to access the web dashboard of the `dask` cluster and verify that all workers are detected and "linked" to the scheduler.
 The address of the dashboard can be found by invoking `terraform output scheduler-status` from your local CLI.
 
 ## Grid search on the cluster
@@ -466,4 +465,4 @@ A side story in this tutorial is the beauty of a declarative approach. If you ma
 There are two next steps that I haven't fully explored yet, but I believe they are definitely worth investigating further:
 
 * You might want to check out `terraform workspace`; this can help you run several clusters from the same directory. For example when running different experiements at the same time.
-* Enable a node with Jupyter server so the local notebook won't be needed
+* Install Jupyter server on one of the nodes of the cluster enabling interactive distributed processing.
